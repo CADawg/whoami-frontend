@@ -1,0 +1,55 @@
+@import "Variables";
+
+.login_container {
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: mix(black, white, 70);
+  padding: 20px;
+}
+
+.login_form {
+  width: 100%;
+  max-width: 500px;
+  background-color: $lightColor;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px 10px;
+
+  form {
+    label {
+      display: block;
+      text-align: left;
+      padding: 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 0;
+      border: none;
+      border-bottom: 1px solid $highlightColor;
+
+      &:focus {
+        outline: none;
+        border-bottom: 2px solid $highlightColor;
+        margin-bottom: 9px;
+      }
+    }
+
+    button {
+      display: block;
+      border: 1px solid $highlightColor;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin: 5px auto;
+      background-color: $highlightColor;
+      color: $lightColor;
+      font-weight: bold;
+    }
+  }
+}

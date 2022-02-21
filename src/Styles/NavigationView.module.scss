@@ -1,0 +1,16 @@
+@import "Variables";
+
+.bar {
+  background-color: $highlightColor;
+  margin-top: 0;
+  height: $navbarHeight;
+  color: $lightColor;
+  padding: 0 10px;
+}
+
+.brand {
+  color: white;
+  margin: 0;
+  line-height: 50px;
+  font-size: 30px;
+}
