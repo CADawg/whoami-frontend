@@ -4,7 +4,7 @@
  * @param apiUrl {string} The URL of the Backend API Login
  */
 import axios from "axios";
-import {encryptShamirSharesWithAES, generateNewShamirShares} from "../Global/Cryptography";
+import {encryptShamirSharesWithAES, generateNewShamirShares, hashPassword} from "../Global/Cryptography";
 import {emailRegex} from "../Global/Regex";
 
 export default class AuthenticationViewModel{
@@ -30,18 +30,18 @@ export default class AuthenticationViewModel{
     /**
      * Registers the User
      * @param username {string} The Username of the User
-     * @param password {string} The Password of the User
+     * @param hashedPassword {string} The Password of the User
      * @param email {string} The Email of the User
      * @param shamirSecrets {string[]} The Shamir Secret (encrypted) of the User
      * @returns {Promise<any>}
      */
-    private async sendRegisterRequest(username: string, password: string, email: string, shamirSecrets: string[]) {
+    private async sendRegisterRequest(username: string, hashedPassword: string, email: string, shamirSecrets: string[]): Promise<{success: boolean, message: string}> {
         try {
             const response = await axios.post(this.apiUrl + "/sign_up", {
                 username: username,
-                password: password,
+                password: hashedPassword,
                 email: email,
-                shamirSecrets: shamirSecrets
+                encryptedShares: shamirSecrets
             });
 
             return response.data;
@@ -54,8 +54,6 @@ export default class AuthenticationViewModel{
     }
 
     public validateRegisterFields(username: string, email: string, password: string, confirmPassword: string): {success: boolean, message: string} {
-        console.log(username, email, password, confirmPassword);
-
         if (username.length < 3) {
             return {
                 success: false,
@@ -63,7 +61,7 @@ export default class AuthenticationViewModel{
             };
         }
 
-        else if (password.length < 8 || password.match(/[0-9]/g) !== null) {
+        else if (password.length < 8 || password.match(/[0-9]/g) === null) {
             return {
                 success: false,
                 message: "Password must be at least 8 characters long and include a number"
@@ -90,13 +88,16 @@ export default class AuthenticationViewModel{
         };
     }
 
-    public async register(username: string, email: string, password: string): Promise<any>{
+    public async register(username: string, email: string, password: string): Promise<{ success: boolean, message: string }>{
         // We only generate these here, they are never sent anywhere unencrypted
         const shares = generateNewShamirShares();
 
         const encryptedShares = encryptShamirSharesWithAES(shares, password);
 
+        // We hash the password here, so it is never sent to the server
+        const hashedPassword = hashPassword(username, password);
+
         // now we can send to the server using the authViewModel
-        await this.sendRegisterRequest(username, email, password, encryptedShares);
+        return await this.sendRegisterRequest(username, hashedPassword, email, encryptedShares);
     }
 }

@@ -8,7 +8,7 @@ export default function LoginViewController(): ReactElement<any,any> | null {
     const [username, setUsername] = useStateInput("");
     const [password, setPassword] = useStateInput("");
 
-    return <LoginView>
+    return <LoginView onSubmit={() => {}}>
         <label htmlFor={"username"}>Username</label>
         <input id={"username"} type="text" placeholder="" autoFocus={true} tabIndex={1} value={username} onInput={setUsername}/>
         <label htmlFor={"password"}>Password</label>
@@ -17,6 +17,6 @@ export default function LoginViewController(): ReactElement<any,any> | null {
         <div className={styles.form_spacer} />
         <Link to={"/"}>Can't log in?</Link>
         <p className={styles.form_spacer_other}>&#x2022;</p>
-        <Link to={"/"}>Join WhoAmI</Link>
+        <Link to={"/sign_up"}>Join WhoAmI</Link>
     </LoginView>;
 }

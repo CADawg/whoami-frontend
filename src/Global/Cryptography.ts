@@ -50,8 +50,6 @@ function encryptShamirSharesWithAES(shamirShares: string[], password: string) {
         // Finalize the encryption
         cipher.finish();
 
-        console.log(iv);
-
         const tagBytes = cipher.mode.tag.getBytes();
 
         // Take the Tag and convert it to hex
@@ -95,8 +93,6 @@ function decryptShamirSharesWithAES(shamirShares: string[], password: string) {
         let encryptedDataBytes = forge.util.binary.hex.decode(encryptedData);
         let ivBytes = Buffer.from(ivHex, 'hex').toString('binary');
         let tagBuffer = forge.util.createBuffer(forge.util.binary.hex.decode(tag));
-
-        console.log(ivBytes);
 
         // Forge AES GCM stands for Galois/Counter Mode and is considered secure (by the US government and BitWarden, so it's good enough for us)
         const decipher = forge.cipher.createDecipher('AES-GCM', key);

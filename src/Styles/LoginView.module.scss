@@ -20,12 +20,12 @@
     label {
       display: block;
       text-align: left;
-      padding: 0 5px;
+      padding: 0;
     }
 
     input {
       width: 100%;
-      padding: 5px;
+      padding: 3px 0;
       margin-bottom: 10px;
       border-radius: 0;
       border: none;
@@ -110,5 +110,19 @@ a:visited {
 
   p {
     margin: 0;
+  }
+}
+
+.login_form form.login_container_disabled {
+  input {
+    border-bottom-color: mix($darkColor, $lightColor, 50%);
+    pointer-events: none;
+    tab-index: -1;
+  }
+
+  button {
+    pointer-events: none;
+    background-color: mix($darkColor, $lightColor, 50%);
+    border-color: mix($darkColor, $lightColor, 50%);
   }
 }
