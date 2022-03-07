@@ -7,6 +7,9 @@ import axios from "axios";
 import {encryptShamirSharesWithAES, generateNewShamirShares, hashPassword} from "../Global/Cryptography";
 import {emailRegex} from "../Global/Regex";
 
+// Set withCredentials so that we can keep the cookies :)
+axios.defaults.withCredentials = true;
+
 export default class AuthenticationViewModel{
     private apiUrl: string;
 
@@ -42,7 +45,7 @@ export default class AuthenticationViewModel{
                 password: hashedPassword,
                 email: email,
                 encryptedShares: shamirSecrets
-            });
+            }, {withCredentials: true});
 
             return response.data;
         } catch (error) {

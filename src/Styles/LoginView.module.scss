@@ -116,12 +116,10 @@ a:visited {
 .login_form form.login_container_disabled {
   input {
     border-bottom-color: mix($darkColor, $lightColor, 50%);
-    pointer-events: none;
     tab-index: -1;
   }
 
   button {
-    pointer-events: none;
     background-color: mix($darkColor, $lightColor, 50%);
     border-color: mix($darkColor, $lightColor, 50%);
   }

@@ -4,7 +4,7 @@ import {Children} from "../Global/Types";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudQuestion} from '@fortawesome/pro-solid-svg-icons';
 
-function LoginView(props: {children: Children, headerText?: string, onSubmit: (e: SyntheticEvent) => void, submitting?: boolean}) {
+function LoginView(props: {children: Children, headerText?: string, onSubmit: (e: SyntheticEvent) => void, disabled?: boolean}) {
     let headerText = props.headerText || "Login in";
 
     return (
@@ -16,7 +16,7 @@ function LoginView(props: {children: Children, headerText?: string, onSubmit: (e
             <div className={styles.login_form}>
 
                 <p>{headerText} to continue to <strong>WhoAmI</strong></p>
-                <form onSubmit={props.onSubmit} className={(props.submitting ? styles.login_container_disabled : "")}>
+                <form onSubmit={props.onSubmit} className={(props.disabled ? styles.login_container_disabled : "")}>
                     {props.children}
                 </form>
             </div>
