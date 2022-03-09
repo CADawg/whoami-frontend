@@ -2,11 +2,12 @@ import LoginView from "../Views/LoginView";
 import styles from "../Styles/LoginView.module.scss";
 import React, {ReactElement, SyntheticEvent, useRef, useState} from "react";
 import {useStateInput, useStateInputWithRegexLimiter} from "../Global/Functions";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import AuthenticationViewModel from "../ViewModels/AuthenticationViewModel";
 import {usernameTypingRegex} from "../Global/Regex";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/pro-solid-svg-icons";
+import urls from "../Global/Urls";
 
 export default function SignUpViewController(props: {authViewModel?: AuthenticationViewModel}): ReactElement<any,any> | null {
     const [username, setUsername] = useStateInputWithRegexLimiter("", usernameTypingRegex);
@@ -16,6 +17,7 @@ export default function SignUpViewController(props: {authViewModel?: Authenticat
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const authViewModel = useRef(props.authViewModel || new AuthenticationViewModel());
+    const navigator = useNavigate();
 
     if (isSubmitting) console.log("Submitting");
 
@@ -27,6 +29,7 @@ export default function SignUpViewController(props: {authViewModel?: Authenticat
                 if (signupStatus.success) {
                     setErrorMessage("");
                     // Do redirect to email verification page here
+                    navigator(urls.emailVerify);
                 } else {
                     setErrorMessage(signupStatus.message);
                 }
@@ -72,6 +75,6 @@ export default function SignUpViewController(props: {authViewModel?: Authenticat
         <div className={styles.form_spacer} />
         <Link to={"/"}>Can't log in?</Link>
         <p className={styles.form_spacer_other}>&#x2022;</p>
-        <Link to={"/log_in"}>Sign in</Link>
+        <Link to={urls.login}>Sign in</Link>
     </LoginView>;
 }

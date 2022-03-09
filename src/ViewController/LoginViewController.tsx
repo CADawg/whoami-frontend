@@ -3,6 +3,7 @@ import styles from "../Styles/LoginView.module.scss";
 import React, {ReactElement} from "react";
 import {useStateInput} from "../Global/Functions";
 import {Link} from "react-router-dom";
+import urls from "../Global/Urls";
 
 export default function LoginViewController(): ReactElement<any,any> | null {
     const [username, setUsername] = useStateInput("");
@@ -17,6 +18,6 @@ export default function LoginViewController(): ReactElement<any,any> | null {
         <div className={styles.form_spacer} />
         <Link to={"/"}>Can't log in?</Link>
         <p className={styles.form_spacer_other}>&#x2022;</p>
-        <Link to={"/sign_up"}>Join WhoAmI</Link>
+        <Link to={urls.register}>Join WhoAmI</Link>
     </LoginView>;
 }

@@ -5,15 +5,18 @@ import NavigationView from "./Views/NavigationView";
 import SignUpViewController from "./ViewController/SignupViewController";
 import { Buffer } from 'buffer';
 import LoginViewController from "./ViewController/LoginViewController";
-global.Buffer = Buffer; // Fix for browser not having Buffer
+import EmailVerificationViewController from "./ViewController/EmailVerificationViewController";
+import urls from "./Global/Urls";
+global.Buffer = Buffer; // Fix for browser not having Buffer to decode and encode hex,b64,b64url .etc.
 
 function Router() {
   return (
     <BrowserRouter>
         <NavigationView />
         <Routes>
-            <Route path="/sign_up" element={<SignUpViewController />} />
-            <Route path="/log_in" element={<LoginViewController />} />
+            <Route path={urls.register} element={<SignUpViewController />} />
+            <Route path={urls.login} element={<LoginViewController />} />
+            <Route path={urls.emailVerify} element={<EmailVerificationViewController />} />
         </Routes>
     </BrowserRouter>
   );

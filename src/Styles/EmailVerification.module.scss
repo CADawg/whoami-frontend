@@ -1,0 +1,23 @@
+@import "Variables.scss";
+
+form input:disabled {
+  border-bottom: none;
+  margin-bottom: 11px;
+}
+
+.two_buttons_holder {
+  display: flex;
+
+  button:first-of-type {
+    margin-right: 5px;
+  }
+
+  button:disabled {
+    background-color: mix($lightColor, $darkColor, 50%);
+    border: 1px solid mix($lightColor, $darkColor, 50%);
+  }
+
+  button:last-of-type {
+    margin-left: 5px;
+  }
+}

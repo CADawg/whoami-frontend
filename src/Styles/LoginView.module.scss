@@ -45,20 +45,20 @@
         margin-bottom: 1px;
       }
     }
-
-    button {
-      display: block;
-      border: 1px solid $highlightColor;
-      padding: 5px 10px;
-      border-radius: 5px;
-      margin: 5px auto;
-      background-color: $highlightColor;
-      color: $lightColor;
-      font-weight: bold;
-      width: 100%;
-      height: 35px;
-    }
   }
+}
+
+button {
+  display: block;
+  border: 1px solid $highlightColor;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 5px auto;
+  background-color: $highlightColor;
+  color: $lightColor;
+  font-weight: bold;
+  width: 100%;
+  height: 35px;
 }
 
 .login_form_head {
