@@ -1,5 +1,7 @@
 import forge from "node-forge";
 import secrets from 'secrets.js-34r7h';
+import {validDecryptionKeyRegex} from "./Regex";
+import {DecryptionError} from "../ViewModels/AuthenticationViewModel";
 
 /**
  * Creates a deterministic hash from a username and password.
@@ -25,7 +27,19 @@ function generateNewShamirShares() {
 
     // We now have 2 shares belonging to the user
     // Return them
-    return secrets.share(cryptographicKey, 2, 2);
+    return {shares: secrets.share(cryptographicKey, 2, 2), cryptographicKey};
+}
+
+// Merge shamir shares to get the user's cryptographic key
+function mergeShamirShares(shares: string[]): string {
+    const data = secrets.combine(shares);
+
+    // Check data is a 256 bit string (64 characters, hexadecimal)
+    if (data.match(validDecryptionKeyRegex) !== null) {
+        return data;
+    } else {
+        throw new DecryptionError("Invalid decryption key"); // TODO: Better error handling (although this should never happen) (doesn't necessarily need to be done for MVP)
+    }
 }
 
 // Use node-forge and the user's password to encrypt each shamir share
@@ -104,19 +118,19 @@ function decryptShamirSharesWithAES(shamirShares: string[], password: string) {
         decipher.finish();
 
         // Check if the tag is correct
-        //if (decipher.mode.tag.toHex() === tagBuffer.toHex()) {
-        // Take the decrypted data and convert it to a string
-        let decryptedShare = decipher.output.getBytes();
-        let decryptedShareString = Buffer.from(decryptedShare).toString();
+        if (decipher.mode.tag.toHex() === tagBuffer.toHex()) {
+            // Take the decrypted data and convert it to a string
+            let decryptedShare = decipher.output.getBytes();
+            let decryptedShareString = Buffer.from(decryptedShare).toString();
 
-        // Add the share to the array
-        decryptedShares.push(decryptedShareString);
-        //} else {
-        //return false;
-        // }
+            // Add the share to the array
+            decryptedShares.push(decryptedShareString);
+        } else {
+            return false;
+        }
     }
 
     return decryptedShares;
 }
 
-export { hashPassword, decryptShamirSharesWithAES, encryptShamirSharesWithAES, generateNewShamirShares };
+export { hashPassword, decryptShamirSharesWithAES, encryptShamirSharesWithAES, generateNewShamirShares, mergeShamirShares };

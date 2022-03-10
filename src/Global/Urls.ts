@@ -5,6 +5,7 @@ const urls = {
     emailVerify: "/auth/verify/email",
     afterLogin: "/",
     afterRegisterComplete: "/",
+    emailVerifyCallback: "/auth/verify/email/callback",
 }
 
 export default urls;

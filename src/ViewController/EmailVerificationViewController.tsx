@@ -19,17 +19,30 @@ export default function EmailVerificationViewController(): ReactElement<any,any>
     const [isEmailVerificationSent, setIsEmailVerificationSent] = useState(false);
     const navigator = useNavigate();
 
-    useEffect(() => {
+    function checkEmailVerificationStatus(isEffect?: boolean): void {
         axios.post(process.env.REACT_APP_API_URL + "auth/is_email_verified").then(response => {
+            // Check success
             if (response.data.success) {
-                if (response.data.data.verified) {
+                if (response.data.data.verified === 1) {
                     setIsEmailVerified(true);
                 }
-                setEmailUserInput(response.data.data.email);
+                // Only update if successful or initial run (running constantly makes this run too often and also breaks if the user is typing)
+                if (isEffect || response.data.data.verified === 1) setEmailUserInput(response.data.data.email);
             } else {
+                // Unsuccessful = Not logged in
                 navigator(urls.login);
             }
         });
+    }
+
+    useEffect(() => {
+        checkEmailVerificationStatus(true);
+
+        const interval = setInterval(() => {
+            checkEmailVerificationStatus();
+        }, 5000);
+
+        return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

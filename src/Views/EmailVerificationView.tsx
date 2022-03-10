@@ -4,7 +4,7 @@ import {Children} from "../Global/Types";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCloudQuestion} from '@fortawesome/pro-solid-svg-icons';
 
-function LoginView(props: {children: Children}) {
+function LoginView(props: {children: Children, hideInstructions?: boolean}) {
 
     return (
         <div className={styles.login_container}>
@@ -14,7 +14,7 @@ function LoginView(props: {children: Children}) {
             </div>
             <div className={styles.login_form}>
 
-                <p>Please click the link in the email we have just sent to confirm your email address.</p>
+                {props.hideInstructions? <></> : <p>Please click the link in the email we have just sent to confirm your email address.</p>}
                 <form>
                     {props.children}
                 </form>
