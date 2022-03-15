@@ -6,6 +6,7 @@ const urls = {
     afterLogin: "/",
     afterRegisterComplete: "/",
     emailVerifyCallback: "/auth/verify/email/callback",
+    home: "/",
 }
 
 export default urls;

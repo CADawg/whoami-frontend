@@ -16,16 +16,10 @@ export default function EmailVerificationCompleteViewController() {
             // Check success
             if (response.data.success) {
                 if (response.data.data.verified) {
-                    if (response.data.data.isThisUser){
-                        setAfterUrl(urls.afterRegisterComplete);
-                        timeout = setTimeout(() => navigate(urls.afterRegisterComplete), 5000);
-                        return setSuccess(true);
-                    } else {
-                        // If not the current user, send them back to the login page
-                        setAfterUrl(urls.login);
-                        timeout = setTimeout(() => navigate(urls.login), 5000);
-                        return setSuccess(true); // This is however, still a successful verification
-                    }
+                    // We have to send them back to login as this tab won't have the login data
+                    setAfterUrl(urls.login);
+                    timeout = setTimeout(() => navigate(urls.login), 5000);
+                    return setSuccess(true); // This is a successful verification
                 }
             }
 

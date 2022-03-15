@@ -16,6 +16,11 @@
   padding: 5px 10px 7px;
   box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
 
+  // This only applies to the login page
+  a:visited {
+    color: $highlightColor;
+  }
+
   form {
     label {
       display: block;
@@ -78,11 +83,6 @@ button {
 .form_spacer {
   border-bottom: 1px solid mix($darkColor, $lightColor, 50%);
   margin: 7px 0;
-}
-
-// This only applies to the login page
-a:visited {
-  color: $highlightColor;
 }
 
 .form_spacer_other {

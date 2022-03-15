@@ -19,8 +19,6 @@ export default function SignUpViewController(props: {authViewModel?: Authenticat
     const authViewModel = useRef(props.authViewModel || new AuthenticationViewModel());
     const navigator = useNavigate();
 
-    if (isSubmitting) console.log("Submitting");
-
     async function doSignup(): Promise<void> {
         const isValid = authViewModel.current.validateRegisterFields(username, email, password, passwordConfirm);
 

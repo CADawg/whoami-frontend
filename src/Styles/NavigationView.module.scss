@@ -6,11 +6,51 @@
   height: $navbarHeight;
   color: $lightColor;
   padding: 0 10px;
+  display: flex;
 }
 
 .brand {
   color: white;
-  margin: 0;
   line-height: 50px;
   font-size: 30px;
+  margin: 0 10px 0 0;
+  flex: 30px 0 0;
+}
+
+.nav_bar_spacer {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.auth_panel{
+  display: flex;
+  align-items: center;
+
+  a {
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+    height: 100%;
+    line-height: 50px;
+    padding: 0 10px;
+  }
+
+  a:hover {
+    background-color: transparentize($lightColor, 0.8);
+  }
+
+  a.highlighted_button {
+    height: auto;
+    padding: 5px 10px;
+    line-height: normal;
+    border-radius: 5px;
+    color: $highlightColor;
+    background-color: $lightColor;
+  }
+
+  a.highlighted_button:hover {
+    background-color: transparentize($lightColor, 0.2);
+  }
 }

@@ -23,7 +23,7 @@ export default function EmailVerificationViewController(): ReactElement<any,any>
         axios.post(process.env.REACT_APP_API_URL + "auth/is_email_verified").then(response => {
             // Check success
             if (response.data.success) {
-                if (response.data.data.verified === 1) {
+                if (response.data.data.verified === true) {
                     setIsEmailVerified(true);
                 }
                 // Only update if successful or initial run (running constantly makes this run too often and also breaks if the user is typing)
