@@ -64,7 +64,6 @@ export default function HomeViewController(props: {authViewModel?: Authenticatio
 
                 for (const subitem in item.subitems) {
                     if (item.subitems.hasOwnProperty(subitem) && (type.fields.hasOwnProperty(item.subitems[subitem].subitem_type))) {
-                        console.log((item.subitems[subitem].subitem_type));
                         // @ts-ignore
                         formDataForPost[item.subitems[subitem].subitem_type] = item.subitems[subitem].subitem_value;
                     }
