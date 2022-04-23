@@ -11,6 +11,7 @@ import EmailVerificationCompleteViewController from "./ViewController/EmailVerif
 import AuthenticationViewModel from "./ViewModels/AuthenticationViewModel";
 import AuthenticatedGuard from './Global/AuthenticatedGuard';
 import LogoutViewController from "./ViewController/LogoutViewController";
+import HomeViewController from "./ViewController/HomeViewController";
 global.Buffer = Buffer; // Fix for browser not having Buffer to decode and encode hex,b64,b64url .etc.
 const authViewModel = new AuthenticationViewModel();
 
@@ -28,7 +29,7 @@ function Router() {
             <Route path={urls.logout} element={<LogoutViewController authViewModel={authViewModel} />} />
             <Route path={urls.emailVerifyCallback + "/:code/:email"} element={<EmailVerificationCompleteViewController />} />
             <Route path={urls.emailVerify} element={<EmailVerificationViewController />} />
-            <Route path={urls.home} element={<AuthenticatedGuard authViewModel={authViewModel}><div>Home</div></AuthenticatedGuard>} />
+            <Route path={urls.home} element={<AuthenticatedGuard authViewModel={authViewModel}><HomeViewController authViewModel={authViewModel} /></AuthenticatedGuard>} />
         </Routes>
     </BrowserRouter>
   );

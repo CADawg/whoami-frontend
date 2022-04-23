@@ -107,6 +107,10 @@ function aesDecryptString(encryptedShare: string, key: string): string|false {
     let ivHex = splitShare[1];
     let tag = splitShare[2];
 
+    if (encryptedData.length === 0) {
+        return ""; // Empty string
+    }
+
     // Convert the hex to bytes
     let encryptedDataBytes = forge.util.binary.hex.decode(encryptedData);
     let ivBytes = Buffer.from(ivHex, 'hex').toString('binary');

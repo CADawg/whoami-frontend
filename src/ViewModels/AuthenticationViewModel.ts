@@ -71,7 +71,7 @@ export default class AuthenticationViewModel{
                 this.isEmailVerifiedAtServer = response.data.data.isVerified;
             } else {
                 this.usernameAtServer = false; // not logged in
-                this.isEmailVerifiedAtServer = false;
+                this.isEmailVerifiedAtServer = undefined;
             }
         } catch (e) {
             this.usernameAtServer = undefined;
@@ -90,6 +90,8 @@ export default class AuthenticationViewModel{
     }
 
     isEmailVerified():boolean {
+        console.log("isEmailVerified", this.isEmailVerifiedAtServer);
+
         if (this.isEmailVerifiedAtServer === undefined) return true;
 
         return this.isEmailVerifiedAtServer;
