@@ -28,7 +28,7 @@ export default function AccountRecoveryViewController() {
     const [account, setAccount] = useState<AccountTemp | null>(store.get("tempAccount", null));
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
-    const [username, setUsername] = useState(store.get("username", ""));
+    const [username, setUsername] = useState(store.get("usernameAlt", ""));
     const [error, setError] = useState("");
     const [recoveryId, setRecoveryId] = useState(store.get("recoveryId", ""));
     const [shares, setShares] = useState<Shares[]>([]);
@@ -106,6 +106,7 @@ export default function AccountRecoveryViewController() {
         };
 
         store.set("tempAccount", account);
+        store.set("usernameAlt", username);
 
         setAccount(account);
 
@@ -145,6 +146,7 @@ export default function AccountRecoveryViewController() {
         if (response.data.success) {
             store.set("recoveryId", response.data.id);
             setRecoveryId(response.data.id);
+            store.set("usernameAlt", "");
         }
     }
 
