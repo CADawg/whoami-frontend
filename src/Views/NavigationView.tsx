@@ -28,6 +28,11 @@ function NavigationView(props: {authViewModel?: AuthenticationViewModel}) {
                 <FontAwesomeIcon icon={faCloudQuestion} />
             </p>
 
+            {loggedIn ? <div className={styles.auth_panel}>
+                <Link to={urls.home}>Vault</Link>
+                <Link to={urls.recovery}>Recovery</Link>
+            </div> : null}
+
             <div className={styles.nav_bar_spacer} />
 
             <div className={styles.auth_panel}>

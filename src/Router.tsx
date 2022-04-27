@@ -12,6 +12,8 @@ import AuthenticationViewModel from "./ViewModels/AuthenticationViewModel";
 import AuthenticatedGuard from './Global/AuthenticatedGuard';
 import LogoutViewController from "./ViewController/LogoutViewController";
 import HomeViewController from "./ViewController/HomeViewController";
+import RecoveryViewController from "./ViewController/RecoveryViewController";
+import AccountRecoveryViewController from "./ViewController/AccountRecoveryViewController";
 global.Buffer = Buffer; // Fix for browser not having Buffer to decode and encode hex,b64,b64url .etc.
 const authViewModel = new AuthenticationViewModel();
 
@@ -29,6 +31,8 @@ function Router() {
             <Route path={urls.logout} element={<LogoutViewController authViewModel={authViewModel} />} />
             <Route path={urls.emailVerifyCallback + "/:code/:email"} element={<EmailVerificationCompleteViewController />} />
             <Route path={urls.emailVerify} element={<EmailVerificationViewController />} />
+            <Route path={urls.recovery} element={<AuthenticatedGuard authViewModel={authViewModel}><RecoveryViewController authViewModel={authViewModel} /></AuthenticatedGuard>} />
+            <Route path={urls.activateRecovery} element={<AccountRecoveryViewController />} />
             <Route path={urls.home} element={<AuthenticatedGuard authViewModel={authViewModel}><HomeViewController authViewModel={authViewModel} /></AuthenticatedGuard>} />
         </Routes>
     </BrowserRouter>

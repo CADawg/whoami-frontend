@@ -39,6 +39,24 @@ function generateNewShamirShares() {
     return {shares: secrets.share(cryptographicKey, 2, 2), cryptographicKey: Buffer.from(cryptographicKey, "hex").toString("binary")};
 }
 
+export function createAdditionalShareFromShares(shares: string[]) {
+    console.log(shares);
+    console.log(secrets.combine(shares));
+    return "";
+}
+
+export function rsaEncryptString(string: string, pubKey: string): string {
+    const publicKey = forge.pki.publicKeyFromPem(pubKey);
+    const encrypted = publicKey.encrypt(string, "RSA-OAEP");
+
+    return forge.util.encode64(encrypted);
+}
+
+export function rsaDecryptString(string: string, privKey: string): string {
+    const privateKey = forge.pki.privateKeyFromPem(privKey);
+    return privateKey.decrypt(forge.util.decode64(string), "RSA-OAEP");
+}
+
 // Merge shamir shares to get the user's cryptographic key
 function mergeShamirShares(shares: string[]): string|false {
     const data = secrets.combine(shares);
@@ -99,6 +117,40 @@ function aesEncryptStringsWithPassword(strings: string[], password: string) {
     let saltHex = Buffer.from(salt, "binary").toString("hex");
 
     return encryptedShares.map(encryptedShare => encryptedShare + ":" + saltHex);
+}
+
+export function aesEncryptStringWithPassword(string: string, password: string) {
+    // Get a random salt
+    let salt = forge.random.getBytesSync(128);
+    // Get the AES-256 key from the password
+    const key = forge.pkcs5.pbkdf2(password, salt, 100001, 32);
+
+    // Encrypt the string
+    let encryptedShare = aesEncryptString(string, key);
+
+    // Calculate salt
+    let saltHex = Buffer.from(salt, "binary").toString("hex");
+
+    return encryptedShare + ":" + saltHex;
+}
+
+// reverse of aesEncryptStringWithPassword
+export function aesDecryptStringWithPassword(encryptedString: string, password: string) {
+    // split by :
+    let encryptedShares = encryptedString.split(":");
+
+    // get last part
+    let saltHex = encryptedShares.pop() || "";
+
+    // join rest back
+    let aesData = encryptedShares.join(":");
+
+    // use pbkdf2 to get the key
+    let key = forge.pkcs5.pbkdf2(password, Buffer.from(saltHex, "hex").toString('binary'), 100001, 32);
+
+    // decrypt with key
+
+    return aesDecryptString(aesData, key);
 }
 
 function aesDecryptString(encryptedShare: string, key: string): string|false {

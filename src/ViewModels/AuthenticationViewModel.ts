@@ -142,8 +142,8 @@ export default class AuthenticationViewModel{
 
             if (response.data.success)  {
                 const data = response.data.data as {emailVerified: number, shares: [number, string[]], keypair: {publicKey: string, encryptedPrivateKey: string}};
-                this.shares = data.shares[1];
                 const decryptedShares = aesDecryptStringsWithPassword(data.shares[1], password);
+                this.shares = decryptedShares;
                 const decryptionKey = mergeShamirShares(decryptedShares);
                 if (decryptionKey) {
                     const decryptedPrivateKey = aesDecryptString(data.keypair.encryptedPrivateKey, decryptionKey);

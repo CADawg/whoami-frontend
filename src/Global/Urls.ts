@@ -7,6 +7,8 @@ const urls = {
     afterRegisterComplete: "/",
     emailVerifyCallback: "/auth/verify/email/callback",
     home: "/",
+    recovery: "/recovery",
+    activateRecovery: "/recover_account"
 }
 
 export default urls;

@@ -52,7 +52,7 @@ export default function LoginViewController(props: {authViewModel?: Authenticati
         <button className={styles.form_button} onClick={onSubmit} tabIndex={3}>Log In</button>
         {error !== "" ? <div className={styles.warning_box}><p>{error}</p></div> : <></>}
         <div className={styles.form_spacer} />
-        <Link to={"/"}>Can't log in?</Link>
+        <Link to={urls.activateRecovery}>Can't log in?</Link>
         <p className={styles.form_spacer_other}>&#x2022;</p>
         <Link to={urls.register}>Join WhoAmI</Link>
     </LoginView>;

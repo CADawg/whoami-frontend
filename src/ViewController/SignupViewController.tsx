@@ -71,7 +71,7 @@ export default function SignUpViewController(props: {authViewModel?: Authenticat
         <button className={styles.form_button} tabIndex={5} disabled={isSubmitting} onClick={onSignupSubmit}>{isSubmitting ? <FontAwesomeIcon spin={true} icon={faSpinner} /> : "Sign up"}</button>
         {errorMessage !== "" ? <div className={styles.warning_box}><p>{errorMessage}</p></div> : <></>}
         <div className={styles.form_spacer} />
-        <Link to={"/"}>Can't log in?</Link>
+        <Link to={urls.activateRecovery}>Can't log in?</Link>
         <p className={styles.form_spacer_other}>&#x2022;</p>
         <Link to={urls.login}>Sign in</Link>
     </LoginView>;
