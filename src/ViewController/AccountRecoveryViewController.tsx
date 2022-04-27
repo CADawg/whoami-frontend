@@ -1,7 +1,12 @@
-import {aesEncryptStringWithPassword, generateRSAKeypair, hashPassword} from "../Global/Cryptography";
+import {
+    aesEncryptStringsWithPassword,
+    aesEncryptStringWithPassword,
+    generateRSAKeypair,
+    hashPassword
+} from "../Global/Cryptography";
 import forge from "node-forge";
 import store from "store/dist/store.modern";
-import {SyntheticEvent, useState} from "react";
+import {SyntheticEvent, useEffect, useState} from "react";
 import AccountRecoveryViewModel from "../ViewModels/AccountRecoveryViewModel";
 import axios from "axios";
 
@@ -13,6 +18,12 @@ export interface AccountTemp {
     encryptedPrivateKey: string;
 }
 
+export interface Shares {
+    share_id: number;
+    recovery_user_id: number;
+    share: string;
+}
+
 export default function AccountRecoveryViewController() {
     const [account, setAccount] = useState<AccountTemp | null>(store.get("tempAccount", null));
     const [password, setPassword] = useState("");
@@ -20,6 +31,62 @@ export default function AccountRecoveryViewController() {
     const [username, setUsername] = useState(store.get("username", ""));
     const [error, setError] = useState("");
     const [recoveryId, setRecoveryId] = useState(store.get("recoveryId", ""));
+    const [shares, setShares] = useState<Shares[]>([]);
+    const [finalPassword, setFinalPassword] = useState("");
+
+    useEffect(() => {
+        if (account !== null) {
+            // get /recovery/recoveryDetails
+
+            axios.post( process.env.REACT_APP_API_URL + `/recovery/recoveryDetails`, {recoveryUserId: recoveryId})
+                .then(res => {
+                    setShares(res.data.data);
+                })
+                .catch();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    function applyNewCredentials(event: SyntheticEvent) {
+        event.preventDefault();
+
+        // check password against account.passwordHash (after hashing it)
+        const enteredPasswordHash = hashPassword(username, finalPassword);
+
+        if (enteredPasswordHash !== account?.passwordHash) {
+            setError("New password is incorrect");
+            return;
+        }
+
+        setError("");
+
+        // decrypt shares with private key
+        const decryptedShares = shares.map(share => {
+            const privateKey = forge.pki.privateKeyFromPem(account?.privateKey);
+            return privateKey.decrypt(forge.util.decode64(share.share));
+        });
+
+        // re-encrypt with pbkdf2 from password (this is why we need it once more)
+        const encryptedShares = aesEncryptStringsWithPassword(decryptedShares, finalPassword);
+
+        // send to server
+
+        axios.post( process.env.REACT_APP_API_URL + `/recovery/completeRecovery`, {
+            recoveryUserId: shares[0].recovery_user_id,
+            replacementShares: encryptedShares
+        })
+            .then(() => {
+                setError("Recovery Complete. You may now log in with your new credentials.");
+                setAccount(null);
+                store.set("tempAccount", null);
+                setRecoveryId("");
+                store.set("recoveryId", "");
+            })
+            .catch(() => {
+                setError("Error applying new credentials");
+            });
+    }
+
 
     function getTempAccount(username: string, password: string) {
         const keypair = generateRSAKeypair();
@@ -83,5 +150,5 @@ export default function AccountRecoveryViewController() {
 
 
     return <AccountRecoveryViewModel account={account} password={password} setPassword={setPassword} passwordConfirm={passwordConfirm} setPasswordConfirm={setPasswordConfirm}
-                                     username={username} setUsername={setUsername} error={error} recoveryId={recoveryId} onSubmitClick={onSubmitClick} />;
+                                     username={username} shares={shares} finalPassword={finalPassword} setFinalPassword={setFinalPassword} applyNewCredentials={applyNewCredentials} setUsername={setUsername} error={error} recoveryId={recoveryId} onSubmitClick={onSubmitClick} />;
 }

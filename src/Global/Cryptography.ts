@@ -40,21 +40,18 @@ function generateNewShamirShares() {
 }
 
 export function createAdditionalShareFromShares(shares: string[]) {
-    console.log(shares);
-    console.log(secrets.combine(shares));
-    return "";
+    return secrets.newShare(Math.floor(Math.random() * 245) + 10, shares);
 }
 
 export function rsaEncryptString(string: string, pubKey: string): string {
     const publicKey = forge.pki.publicKeyFromPem(pubKey);
-    const encrypted = publicKey.encrypt(string, "RSA-OAEP");
+    const encrypted = publicKey.encrypt(string);
 
     return forge.util.encode64(encrypted);
 }
 
-export function rsaDecryptString(string: string, privKey: string): string {
-    const privateKey = forge.pki.privateKeyFromPem(privKey);
-    return privateKey.decrypt(forge.util.decode64(string), "RSA-OAEP");
+export function rsaDecryptString(string: string, privKey: forge.pki.PrivateKey): string {
+    return "decrypt" in privKey ? privKey.decrypt(forge.util.decode64(string)) : "";
 }
 
 // Merge shamir shares to get the user's cryptographic key
